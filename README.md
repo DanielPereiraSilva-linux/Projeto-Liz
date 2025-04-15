@@ -16,7 +16,6 @@
 > 🎮 Bem-vindo, <kbd>player_01</kbd>.  
 > Seu objetivo: **dominar o Linux via terminal**.  
 > Sua arena: **projetoLiz**, um servidor online rodando Ubuntu 22.04.  
-> Ferramentas: `bash`, `vim`, `htop`, `tmux`, `nmap`, `apt`, `sudo`...  
 > Estilo: ⚔️ Hacker | 🎯 Sysadmin | 🧠 Aprendiz
 
 ---
@@ -47,13 +46,16 @@
 
 ---
 
-## 🧍 Bonequinhos no terminal (modo retro pixel art)
+## 🍄 Corrida dos bonequinhos (modo Super Mario)
 
 <p align="center">
-  <img src="https://media.giphy.com/media/MdA16VIoXKKxNE8Stk/giphy.gif" width="160" />
-  <img src="https://media.giphy.com/media/13FrpeVH09Zrb2/giphy.gif" width="160" />
-  <img src="https://media.giphy.com/media/fwbzI2kV3Xxbu/giphy.gif" width="160" />
+  <img src="https://media.giphy.com/media/10JhviFuU2PC7K/giphy.gif" width="180" />
+  <img src="https://media.giphy.com/media/SKGo6OYe24EBG/giphy.gif" width="180" />
+  <img src="https://media.giphy.com/media/GXhxYMN7s5HKY/giphy.gif" width="180" />
 </p>
+
+> Suba no terminal como se fosse um cogumelo mágico 🍄  
+> Cada comando é um passo rumo ao próximo nível!
 
 ---
 
