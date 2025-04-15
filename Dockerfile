@@ -32,7 +32,7 @@ RUN echo "projeto-liz" > /etc/hostname && \
 USER visitante
 WORKDIR /home/visitante
 
-EXPOSE 7681
+EXPOSE porta
 
 # Inicia ttyd com bash e carrega rbash como subshell
 CMD ["ttyd", "-p", "7681", "--base-path", "/", "bash", "-c", "rbash -l"]
