@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Projeto Liz - Terminal Linux</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      overflow: hidden;
+      font-family: 'Share Tech Mono', monospace;
+      color: white;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 10px 20px;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 3;
+      border-bottom: 2px solid #00ff00;
+    }
+
+    .categories {
+      display: flex;
+      gap: 15px;
+    }
+
+    .categories .menu {
+      position: relative;
+    }
+
+    .navbar .categories > div > button {
+      color: #00ff00;
+      background: transparent;
+      border: none;
+      font-size: 1.1em;
+      cursor: pointer;
+    }
+
+    .navbar .categories > div > button:hover {
+      color: red;
+    }
+
+    .submenu {
+      display: none;
+      position: absolute;
+      top: 30px;
+      left: 0;
+      background: rgba(0, 0, 0, 0.95);
+      border: 2px solid #00ff00;
+      padding: 10px;
+      border-radius: 10px;
+      z-index: 4;
+    }
+
+    .submenu button {
+      display: block;
+      background: none;
+      border: none;
+      color: #00ff00;
+      padding: 5px 0;
+      text-align: left;
+      width: 100%;
+      cursor: pointer;
+    }
+
+    .submenu button:hover {
+      color: red;
+    }
+
+    .about-toggle {
+      cursor: pointer;
+      color: #00ff00;
+      font-size: 1.1em;
+      margin-right: 30px;
+    }
+
+    #about {
+      display: none;
+      position: absolute;
+      top: 60px;
+      right: 20px;
+      width: 300px;
+      background: rgba(0, 0, 0, 0.95);
+      border: 2px solid #00ff00;
+      padding: 15px;
+      border-radius: 10px;
+      z-index: 4;
+    }
+
+    #about h3 {
+      color: #00ff00;
+      margin-top: 0;
+    }
+
+    #about .donate {
+      margin-top: 10px;
+      background: rgba(255, 0, 0, 0.8);
+      padding: 5px;
+      border-radius: 5px;
+      font-size: 1.1em;
+      text-align: center;
+      text-shadow: 0 0 5px red, 0 0 10px red;
+    }
+
+    #terminal-container {
+      position: absolute;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70vw;
+      height: 80vh;
+      background: rgba(0, 0, 0, 0.8);
+      border: 2px solid #00ff00;
+      box-shadow: 0 0 20px #00ff00;
+      z-index: 2;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    #version {
+      position: absolute;
+      bottom: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: #00ff00;
+      padding: 5px 10px;
+      border-radius: 10px;
+      font-size: 0.9em;
+      z-index: 3;
+    }
+
+    #guidelines {
+      position: absolute;
+      bottom: 10px;
+      left: 20px;
+      background: rgba(0, 0, 0, 0.8);
+      border: 2px solid #00ff00;
+      padding: 10px;
+      border-radius: 10px;
+      z-index: 3;
+      max-width: 300px;
+    }
+
+    #guidelines h4 {
+      margin: 0;
+      color: #00ff00;
+    }
+
+    #guidelines p {
+      font-size: 0.9em;
+      margin-top: 5px;
+    }
+
+    .doc-search {
+      background: black;
+      border: 1px solid #00ff00;
+      color: #00ff00;
+      padding: 5px;
+      border-radius: 5px;
+      margin-left: 20px;
+      width: 200px;
+    }
+
+    .search-results {
+      position: absolute;
+      top: 60px;
+      left: 20px;
+      background: rgba(0, 0, 0, 0.8);
+      border: 2px solid #00ff00;
+      width: 200px;
+      border-radius: 10px;
+      z-index: 4;
+      display: none;
+    }
+
+    .search-results button {
+      background: none;
+      border: none;
+      color: #00ff00;
+      padding: 5px 0;
+      text-align: left;
+      width: 100%;
+      cursor: pointer;
+    }
+
+    .search-results button:hover {
+      color: red;
+    }
+
+    .matrix-box {
+      display: none;
+      position: absolute;
+      top: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50vw;
+      background: rgba(0, 0, 0, 0.95);
+      color: #00ff00;
+      font-family: 'Share Tech Mono', monospace;
+      border: 2px solid #00ff00;
+      padding: 20px;
+      z-index: 5;
+      animation: matrixfade 0.3s ease-in-out;
+    }
+
+    @keyframes matrixfade {
+      from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    .close-btn {
+      margin-top: 15px;
+      display: block;
+      text-align: center;
+      background: red;
+      color: white;
+      padding: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .navbar .action-buttons {
+      display: flex;
+      gap: 20px;
+    }
+
+    .navbar .action-buttons a,
+    .navbar .action-buttons button {
+      color: #00ff00;
+      background: transparent;
+      border: 1px solid #00ff00;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    .navbar .action-buttons a:hover,
+    .navbar .action-buttons button:hover {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+<canvas id="matrix"></canvas>
+
+<div class="navbar">
+  <div class="categories">
+    <div class="menu">
+      <button onclick="toggleSubmenu('comandos')">Comandos</button>
+      <div class="submenu" id="comandos">
+        <button onclick="showMatrixBox('ls - lista arquivos e diretórios')">ls</button>
+        <button onclick="showMatrixBox('top - mostra os processos ativos')">top</button>
+        <button onclick="showMatrixBox('ping - verifica a conectividade com um host')">ping</button>
+        <button onclick="showMatrixBox('ip a - mostra interfaces de rede')">ip a</button>
+        <button onclick="showMatrixBox('chmod - altera permissões de arquivos')">chmod</button>
+        <button onclick="showMatrixBox('ufw - configura o firewall')">ufw</button>
+      </div>
+    </div>
+    <input type="text" class="doc-search" placeholder="Procurar documentação..." oninput="searchCommands(this.value)">
+  </div>
+
+  <div class="about-toggle" onclick="toggleAbout()">💡 Sobre o Criador</div>
+
+  <div class="action-buttons">
+    <button onclick="login()">Login</button>
+    <a href="apoiar.html">Apoiar</a>
+  </div>
+</div>
+
+<div id="about">
+  <h3>Sobre o Criador</h3>
+  <p>Projeto desenvolvido por um entusiasta de Linux e open source. Se curtir, apoie com um café!</p>
+  <div class="donate">Doe-me um café ☕<br>PIX: <strong>danielsysadmin@proton.me</strong></div>
+</div>
+
+<div id="terminal-container">
+  <iframe src="/terminal/"></iframe>
+</div>
+
+<div id="version">Versão 1.0 - Atualizado em 15/04/2025</div>
+
+<div id="guidelines">
+  <h4>Orientações</h4>
+  <p>Digite <code>bash</code> e pressione Enter para liberar todas as funcionalidades do terminal.</p>
+</div>
+
+<div class="matrix-box" id="matrix-box">
+  <pre id="matrix-content"></pre>
+  <div class="close-btn" onclick="closeMatrixBox()">Fechar</div>
+</div>
+
+<div class="search-results" id="search-results"></div>
+
+<audio id="bg-audio" autoplay loop>
+  <source src="hadouken.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  const commands = {
+    comandos: ['ls - lista arquivos e diretórios', 'top - mostra os processos ativos', 'ping - verifica a conectividade com um host', 'ip a - mostra interfaces de rede', 'chmod - altera permissões de arquivos', 'ufw - configura o firewall']
+  };
+
+  function searchCommands(query) {
+    const resultsContainer = document.getElementById('search-results');
+    resultsContainer.innerHTML = ''; // Clear previous results
+    let found = false;
+
+    for (const category in commands) {
+      const filteredCommands = commands[category].filter(command => command.toLowerCase().includes(query.toLowerCase()));
+      filteredCommands.forEach(command => {
+        const button = document.createElement('button');
+        button.textContent = command.split(' - ')[0]; // Show only the command name
+        button.onclick = () => showMatrixBox(command);
+        resultsContainer.appendChild(button);
+      });
+      if (filteredCommands.length > 0) found = true;
+    }
+
+    resultsContainer.style.display = found ? 'block' : 'none';
+  }
+
+  function showMatrixBox(command) {
+    const box = document.getElementById('matrix-box');
+    const content = document.getElementById('matrix-content');
+    content.textContent = command;
+    box.style.display = 'block';
+  }
+
+  function closeMatrixBox() {
+    document.getElementById('matrix-box').style.display = 'none';
+  }
+
+  function toggleSubmenu(menuId) {
+    const submenu = document.getElementById(menuId);
+    submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+  }
+
+  function toggleAbout() {
+    const about = document.getElementById('about');
+    about.style.display = about.style.display === 'block' ? 'none' : 'block';
+  }
+
+  function login() {
+    alert('Função de login ainda não implementada.');
+  }
+</script>
+</body>
+</html>
